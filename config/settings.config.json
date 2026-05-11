@@ -1,0 +1,29 @@
+{
+  "type": "town-settings",
+  "version": 1,
+  "agents": {
+    "claude-opus": {
+      "command": "claude",
+      "args": [
+        "--dangerously-skip-permissions",
+        "--model",
+        "opus"
+      ]
+    }
+  },
+  "role_agents": {
+    "boot": "claude-haiku",
+    "dog": "claude-haiku"
+  },
+  "cost_tier": "standard",
+  "operational": {
+    "daemon": {
+      "doctor_mol_cooldown": "10m",
+      "boot_spawn_cooldown": "5m"
+    }
+  },
+  "disabled_patrols": [
+    "main_branch_test",
+    "stuck-agent-dog"
+  ]
+}
