@@ -17,7 +17,7 @@ Open a Claude Code session in any directory (your home is fine) and paste:
 >
 > 1. Clone `https://github.com/wbern/gastown-me-and-my-crew` into `~/.gt-presets/gastown-me-and-my-crew` (create the parent dir if needed, `git pull` if it already exists).
 > 2. Run `./install.sh` from that directory. The script backs up my existing `~/gt/settings/config.json` and `~/gt/mayor/daemon.json` to `.bak.<timestamp>` before overwriting, so it's safe.
-> 3. Show me the diff between the backups and the new files so I can see what changed.
+> 3. Show me the diff between the backups and the new files so I can see what changed. (If I've already installed before, the script short-circuits and no new backups are made — that's fine, just say so.)
 > 4. Tell me to run `gt down && gt up --restore` to apply.
 >
 > Stop and ask me before doing anything destructive — for example, if `gt` isn't installed, or if `~/gt` doesn't exist, or if the version check warns.
@@ -61,9 +61,9 @@ it's the same idea (don't auto-wake on idle).
 - A working Gas Town install — see https://github.com/steveyegge/gastown
 - `~/gt` populated by a prior `gt up` (so the script has files to back up)
 
-**Known-good `gt` version:** `v1.0.0-78`. The installer will warn — not block —
-on other versions. The schema can drift; if a future `gt` rejects these files,
-file an issue.
+**Known-good `gt` version:** any `v1.0.1-*` (tested on `v1.0.1-4-g91350080`).
+The installer will warn — not block — on other versions. The schema can drift;
+if a future `gt` rejects these files, file an issue.
 
 ---
 

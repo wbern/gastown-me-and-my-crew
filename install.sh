@@ -7,7 +7,9 @@
 set -euo pipefail
 
 GT_HOME="${GT_HOME:-$HOME/gt}"
-SUPPORTED_GT_VERSION="v1.0.0-78"
+# Matched as a glob; accepts any patch of v1.0.1-* (the minor we tested against).
+SUPPORTED_GT_VERSION_GLOB="v1.0.1-*"
+SUPPORTED_GT_VERSION_HUMAN="v1.0.1-*"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SRC_SETTINGS="$SCRIPT_DIR/config/settings.config.json"
@@ -28,10 +30,14 @@ if ! command -v gt >/dev/null 2>&1; then
 fi
 
 GT_VERSION="$(gt version 2>/dev/null | awk '{print $3}' | head -1 || true)"
+version_supported() {
+  # shellcheck disable=SC2053  # right-hand side is an intentional glob
+  [[ "$1" == $SUPPORTED_GT_VERSION_GLOB ]]
+}
 if [[ -z "$GT_VERSION" ]]; then
   warn "could not parse 'gt version' output — proceeding anyway"
-elif [[ "$GT_VERSION" != "$SUPPORTED_GT_VERSION" ]]; then
-  warn "gt version is $GT_VERSION; this preset was tested against $SUPPORTED_GT_VERSION."
+elif ! version_supported "$GT_VERSION"; then
+  warn "gt version is $GT_VERSION; this preset was tested against $SUPPORTED_GT_VERSION_HUMAN."
   warn "It will likely still work, but the schema may have drifted."
 fi
 
