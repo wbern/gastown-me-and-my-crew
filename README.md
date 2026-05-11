@@ -30,23 +30,26 @@ and the copy — pausing for your approval at the diff step.
 
 ---
 
-## Install — manually (four commands)
+## Install — manually
 
 ```bash
+# 1. Clone
 git clone https://github.com/wbern/gastown-me-and-my-crew ~/.gt-presets/gmamc
+
+# 2. Diff — review before changing anything
 diff ~/gt/settings/config.json ~/.gt-presets/gmamc/config/settings.config.json
 diff ~/gt/mayor/daemon.json    ~/.gt-presets/gmamc/config/mayor.daemon.json
-# Happy with the diffs? Back up + copy each, then: gt down && gt up --restore
-```
 
-Backup + copy for completeness:
-
-```bash
+# 3. Happy with the diffs? Back up the existing files
 TS=$(date +%Y%m%d-%H%M%S)
 cp ~/gt/settings/config.json ~/gt/settings/config.json.bak.$TS
 cp ~/gt/mayor/daemon.json    ~/gt/mayor/daemon.json.bak.$TS
+
+# 4. Overwrite with the preset
 cp ~/.gt-presets/gmamc/config/settings.config.json ~/gt/settings/config.json
 cp ~/.gt-presets/gmamc/config/mayor.daemon.json    ~/gt/mayor/daemon.json
+
+# 5. Apply
 gt down && gt up --restore
 ```
 
