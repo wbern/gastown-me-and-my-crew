@@ -1,9 +1,14 @@
-# gastown-me-and-my-crew
+# Me and My Crew
 
-**Gas Town config preset: manual mode / crew-only.** Keeps the rig/crew/mail/beads
-scaffolding; turns off the patrols that burn tokens in the background
-(witness, deacon, doctor / compactor / checkpoint dogs, refinery patrol, main-branch
-tests).
+![Me and My Crew](assets/crew.png)
+
+*We ride in Gas Town. The dogs don't bark, the witnesses don't watch.*
+
+---
+
+**Manual mode / crew-only.** Keeps the rig/crew/mail/beads scaffolding; turns
+off the patrols that burn tokens in the background (witness, deacon, doctor /
+compactor / checkpoint dogs, refinery patrol, main-branch tests).
 
 If you want Gas Town as a workbench instead of a 24/7 swarm, this is for you.
 
