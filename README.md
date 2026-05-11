@@ -16,6 +16,51 @@ The whole thing is two JSON files and a recipe. There is no installer.
 
 ---
 
+## Why this exists
+
+People keep asking how I actually work with agents. The honest answer is: I use
+Gas Town, but with most of the autonomy turned off. This repo is that exact
+config.
+
+What I keep from Gas Town:
+
+- **The Mayor.** Having one agent I can talk to about meta-tasks ("what's the
+  crew up to?", "spin up a new rig for X") is a real workflow upgrade over
+  juggling raw `claude` sessions.
+- **The CLAUDE.md** that ships with `gt`. Solid baseline, didn't want to
+  re-derive it.
+- **Rigs and crew.** Multiple Claude Code sessions, each with its own identity
+  and beads/mail, that I can switch between in a single keystroke.
+- **Same branch, different working trees.** Two crew mates can work the same
+  branch in parallel and each keeps their own dirty state — no stepping on
+  each other.
+- **Mail and nudges between agents.** Persistent mail when a message needs to
+  survive a session restart, lightweight nudges when it doesn't. Coordinating
+  two or three crew mates by hand would be miserable; this makes it
+  effortless.
+- **tmux, basically for free.** Gas Town wires up tmux around all of this. If
+  you live in tmux already, it's one less thing to set up (and pairs nicely
+  with [tmux-explode](https://github.com/wbern/tmux-explode) for fanning panes
+  out).
+
+What I turn off:
+
+Gas Town ships a small army of background agents — witnesses, deacons, dogs,
+refineries — that wake on timers to audit each other, escalate stuck work,
+keep the swarm honest. That design made sense when models were weaker and the
+target was "leave it running overnight, come back to merged PRs." Plenty of
+people want that today. I don't — at least not yet.
+
+I'm still human-in-the-loop. I'll stop being human-in-the-loop when an agent
+can run for half a day unattended and produce work I'd put my name on. Until
+then, those background patrols are mostly burning tokens watching me not
+screw up.
+
+So this preset is the Gas Town I actually use: the parts that make my day
+better, none of the parts that assume I'm asleep.
+
+---
+
 ## Install — give this prompt to your local Claude Code
 
 Open a Claude Code session anywhere and paste:
@@ -26,7 +71,7 @@ Open a Claude Code session anywhere and paste:
 > 2. Run `gt version`. If it isn't `v1.0.1-*`, tell me before going further — I'll decide whether to proceed.
 > 3. Diff `~/gt/settings/config.json` against `config/settings.config.json`, and `~/gt/mayor/daemon.json` against `config/mayor.daemon.json`. Show me both diffs.
 > 4. If I approve, copy each destination file to `<dest>.bak.$(date +%Y%m%d-%H%M%S)` first, then overwrite with the preset version.
-> 5. Tell me to run `gt down && gt up --restore` to apply.
+> 5. Tell me to run `gt down && gt up --restore`, then `gt status` to confirm the daemon came up clean (malformed configs surface here).
 >
 > Stop and ask before doing anything destructive.
 
@@ -39,11 +84,11 @@ and the copy — pausing for your approval at the diff step.
 
 ```bash
 # 1. Clone
-git clone https://github.com/wbern/gastown-me-and-my-crew ~/.gt-presets/gmamc
+git clone https://github.com/wbern/gastown-me-and-my-crew ~/.gt-presets/gastown-me-and-my-crew
 
 # 2. Diff — review before changing anything
-diff ~/gt/settings/config.json ~/.gt-presets/gmamc/config/settings.config.json
-diff ~/gt/mayor/daemon.json    ~/.gt-presets/gmamc/config/mayor.daemon.json
+diff ~/gt/settings/config.json ~/.gt-presets/gastown-me-and-my-crew/config/settings.config.json
+diff ~/gt/mayor/daemon.json    ~/.gt-presets/gastown-me-and-my-crew/config/mayor.daemon.json
 
 # 3. Happy with the diffs? Back up the existing files
 TS=$(date +%Y%m%d-%H%M%S)
@@ -51,16 +96,20 @@ cp ~/gt/settings/config.json ~/gt/settings/config.json.bak.$TS
 cp ~/gt/mayor/daemon.json    ~/gt/mayor/daemon.json.bak.$TS
 
 # 4. Overwrite with the preset
-cp ~/.gt-presets/gmamc/config/settings.config.json ~/gt/settings/config.json
-cp ~/.gt-presets/gmamc/config/mayor.daemon.json    ~/gt/mayor/daemon.json
+cp ~/.gt-presets/gastown-me-and-my-crew/config/settings.config.json ~/gt/settings/config.json
+cp ~/.gt-presets/gastown-me-and-my-crew/config/mayor.daemon.json    ~/gt/mayor/daemon.json
 
-# 5. Apply
+# 5. Apply, then verify the daemon came up clean
 gt down && gt up --restore
+gt status
 ```
 
 ---
 
 ## What it disables (and why)
+
+*Last verified against `gt v1.0.1-4-g91350080` on 2026-05-11. If the JSON
+diverges from this table, the JSON is authoritative.*
 
 All of these are flipped from the Gas Town defaults to `"enabled": false`:
 
@@ -85,6 +134,11 @@ Left **on** (infrastructure, not autonomy — keep them):
 
 `stuck-agent-dog` is also listed in `disabled_patrols` at the town level —
 same idea (don't auto-wake on idle).
+
+`main_branch_test` is disabled in both layers (town `disabled_patrols` *and*
+per-patrol `enabled: false`). Belt and suspenders — town-level is
+authoritative on current `gt`, the per-patrol flag covers older builds that
+don't read `disabled_patrols`.
 
 ---
 
@@ -114,6 +168,11 @@ ten seconds.
 Restore the most recent `.bak.<timestamp>` next to each file, or
 `git checkout` if you keep `~/gt` under version control. Then
 `gt down && gt up --restore`.
+
+If you've installed the preset more than once, the most recent backup is
+the *previous preset version*, not your original config. To get back to
+pre-preset state, restore the **oldest** `.bak.<timestamp>`. List them with
+`ls -lt ~/gt/settings/config.json.bak.*` (oldest at the bottom).
 
 ---
 
