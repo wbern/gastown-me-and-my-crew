@@ -8,9 +8,13 @@
 
 [Gas Town](https://github.com/steveyegge/gastown) is an atmospheric way to
 work with many Claude Code agents at once — rigs, crews, a Mayor you can talk
-to, mail and nudges between agents, all wired through tmux. Out of the box
-it's designed to run unattended: a swarm of background patrols keeps itself
+to, mail and nudges between agents, all wired through tmux. Steve Yegge's
+[*Welcome to Gas Town*](https://steve-yegge.medium.com/welcome-to-gas-town-4f25ee16dd04)
+is the original introduction if you want the full pitch. Out of the box it's
+designed to run unattended: a swarm of background patrols keeps itself
 coordinated while you sleep.
+
+![Gas Town locomotive](assets/gas-town-locomotive.png)
 
 This repo is the config that turns it into a workbench instead. You keep all
 the conveniences — Mayor, rigs, crew, comms — and turn off the patrols that
