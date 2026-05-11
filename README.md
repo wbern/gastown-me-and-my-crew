@@ -7,23 +7,48 @@ tests).
 
 If you want Gas Town as a workbench instead of a 24/7 swarm, this is for you.
 
+The whole thing is two JSON files and a recipe. There is no installer.
+
 ---
 
-## Quick install — give this prompt to your local Claude Code
+## Install — give this prompt to your local Claude Code
 
-Open a Claude Code session in any directory (your home is fine) and paste:
+Open a Claude Code session anywhere and paste:
 
 > Install the `gastown-me-and-my-crew` preset for me.
 >
-> 1. Clone `https://github.com/wbern/gastown-me-and-my-crew` into `~/.gt-presets/gastown-me-and-my-crew` (create the parent dir if needed, `git pull` if it already exists).
-> 2. Run `./install.sh` from that directory. The script backs up my existing `~/gt/settings/config.json` and `~/gt/mayor/daemon.json` to `.bak.<timestamp>` before overwriting, so it's safe.
-> 3. Show me the diff between the backups and the new files so I can see what changed. (If I've already installed before, the script short-circuits and no new backups are made — that's fine, just say so.)
-> 4. Tell me to run `gt down && gt up --restore` to apply.
+> 1. Clone `https://github.com/wbern/gastown-me-and-my-crew` to `~/.gt-presets/gastown-me-and-my-crew` (`git pull` if it already exists).
+> 2. Run `gt version`. If it isn't `v1.0.1-*`, tell me before going further — I'll decide whether to proceed.
+> 3. Diff `~/gt/settings/config.json` against `config/settings.config.json`, and `~/gt/mayor/daemon.json` against `config/mayor.daemon.json`. Show me both diffs.
+> 4. If I approve, copy each destination file to `<dest>.bak.$(date +%Y%m%d-%H%M%S)` first, then overwrite with the preset version.
+> 5. Tell me to run `gt down && gt up --restore` to apply.
 >
-> Stop and ask me before doing anything destructive — for example, if `gt` isn't installed, or if `~/gt` doesn't exist, or if the version check warns.
+> Stop and ask before doing anything destructive.
 
-That's it. Claude will handle the clone, run the installer, surface the diff,
-and tell you the restart command.
+Claude does the clone, the version check, the diff, the timestamped backup,
+and the copy — pausing for your approval at the diff step.
+
+---
+
+## Install — manually (four commands)
+
+```bash
+git clone https://github.com/wbern/gastown-me-and-my-crew ~/.gt-presets/gmamc
+diff ~/gt/settings/config.json ~/.gt-presets/gmamc/config/settings.config.json
+diff ~/gt/mayor/daemon.json    ~/.gt-presets/gmamc/config/mayor.daemon.json
+# Happy with the diffs? Back up + copy each, then: gt down && gt up --restore
+```
+
+Backup + copy for completeness:
+
+```bash
+TS=$(date +%Y%m%d-%H%M%S)
+cp ~/gt/settings/config.json ~/gt/settings/config.json.bak.$TS
+cp ~/gt/mayor/daemon.json    ~/gt/mayor/daemon.json.bak.$TS
+cp ~/.gt-presets/gmamc/config/settings.config.json ~/gt/settings/config.json
+cp ~/.gt-presets/gmamc/config/mayor.daemon.json    ~/gt/mayor/daemon.json
+gt down && gt up --restore
+```
 
 ---
 
@@ -41,7 +66,7 @@ All of these are flipped from the Gas Town defaults to `"enabled": false`:
 | `refinery`         | Wakes Refinery agents to push merge-request beads forward| Tokens; finish PRs by hand |
 | `main_branch_test` | Periodic main-branch test runs                           | Tokens + CI noise |
 
-Left **on** (these are infrastructure, not autonomy — keep them):
+Left **on** (infrastructure, not autonomy — keep them):
 
 - `heartbeat` — daemon liveness
 - `dolt_backup` — backs up the Dolt data plane (beads, mail, identity)
@@ -51,52 +76,36 @@ Left **on** (these are infrastructure, not autonomy — keep them):
 - `scheduled_maintenance` — nightly Dolt maintenance window
 
 `stuck-agent-dog` is also listed in `disabled_patrols` at the town level —
-it's the same idea (don't auto-wake on idle).
+same idea (don't auto-wake on idle).
 
 ---
 
 ## Prerequisites
 
-- macOS or Linux (the install script is `bash`)
 - A working Gas Town install — see https://github.com/steveyegge/gastown
-- `~/gt` populated by a prior `gt up` (so the script has files to back up)
+- `~/gt` populated by a prior `gt up` (so there's something to diff against)
 
 **Known-good `gt` version:** any `v1.0.1-*` (tested on `v1.0.1-4-g91350080`).
-The installer will warn — not block — on other versions. The schema can drift;
-if a future `gt` rejects these files, file an issue.
-
----
-
-## Manual install (no Claude needed)
-
-```bash
-git clone https://github.com/wbern/gastown-me-and-my-crew ~/.gt-presets/gastown-me-and-my-crew
-cd ~/.gt-presets/gastown-me-and-my-crew
-./install.sh
-gt down && gt up --restore
-```
-
-To revert:
-
-```bash
-cd ~/.gt-presets/gastown-me-and-my-crew
-./uninstall.sh
-gt down && gt up --restore
-```
-
-`uninstall.sh` restores the most recent `.bak.<timestamp>` for each file. If
-no backup exists (e.g. you deleted them), it leaves the current file alone
-and warns.
+Schemas can drift on either side of that range; if a future `gt` rejects these
+files, file an issue.
 
 ---
 
 ## What's in `config/`
 
-- `settings.config.json` → installed at `~/gt/settings/config.json`
-- `mayor.daemon.json` → installed at `~/gt/mayor/daemon.json`
+- `settings.config.json` → `~/gt/settings/config.json`
+- `mayor.daemon.json` → `~/gt/mayor/daemon.json`
 
 Both are sanitized — no rig names, no account handles. You can read them in
 ten seconds.
+
+---
+
+## Uninstall
+
+Restore the most recent `.bak.<timestamp>` next to each file, or
+`git checkout` if you keep `~/gt` under version control. Then
+`gt down && gt up --restore`.
 
 ---
 
