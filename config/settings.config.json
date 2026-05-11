@@ -9,14 +9,6 @@
         "--model",
         "opus"
       ]
-    },
-    "claude-haiku": {
-      "command": "claude",
-      "args": [
-        "--dangerously-skip-permissions",
-        "--model",
-        "haiku"
-      ]
     }
   },
   "role_agents": {
