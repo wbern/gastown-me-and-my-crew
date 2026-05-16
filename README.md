@@ -1,10 +1,15 @@
-<p align="center"><img src="./logo.svg" width="160" alt="gastown-me-and-my-crew logo"></p>
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./logo-dark.svg">
+    <img src="./logo.svg" width="160" alt="gastown-me-and-my-crew logo">
+  </picture>
+</p>
 
-# Me and My Crew
+<h1 align="center">Me and My Crew</h1>
 
-![Me and My Crew](assets/crew.png)
+<p align="center"><em>We ride in Gas Town. The dogs don't bark, the witnesses don't watch.</em></p>
 
-*We ride in Gas Town. The dogs don't bark, the witnesses don't watch.*
+<p align="center"><img src="assets/crew.png" alt="Me and My Crew"></p>
 
 ---
 
