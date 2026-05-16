@@ -1,3 +1,5 @@
+<p align="center"><img src="./logo.svg" width="160" alt="gastown-me-and-my-crew logo"></p>
+
 # Me and My Crew
 
 ![Me and My Crew](assets/crew.png)
