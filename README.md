@@ -5,6 +5,12 @@
   </picture>
 </p>
 
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <a href="https://claude.ai/code"><img src="https://img.shields.io/badge/Made%20with-Claude%20Code-blueviolet" alt="Made with Claude Code"></a>
+  <a href="https://github.com/wbern/gastown-me-and-my-crew/graphs/contributors"><img src="https://img.shields.io/github/contributors/wbern/gastown-me-and-my-crew" alt="Contributors"></a>
+</p>
+
 <h1 align="center">Me and My Crew</h1>
 
 <p align="center"><em>We ride in Gas Town. The dogs don't bark, the witnesses don't watch.</em></p>
